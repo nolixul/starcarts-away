@@ -7,13 +7,18 @@ import { addFave } from '../features/faves'
 const Characters = () => {
 	const { data, isError, isLoading } = useGetCharactersQuery()
 	const dispatch = useDispatch()
-	console.log(data, 'data')
 
 	const selectCharacter = e => {
 		const { title } = e.currentTarget.dataset
 		const character = data.results.find(character => character.title === title)
 		return character
 	}
+
+	const cleanUpDetailName = (detailName) => {
+		let cleanedDetailName = detailName.replace('_', ' ')
+		return cleanedDetailName.charAt(0).toUpperCase() + cleanedDetailName.slice(1)	
+	}
+
 	const addToFavourites = e => dispatch(addFave(selectCharacter(e)))
 
 	if (isLoading) {
@@ -22,6 +27,7 @@ const Characters = () => {
 	if (isError) {
 		return <Message error={isError}>There was an error</Message>
 	}
+
 	if (data && Boolean(data?.results?.length)) {
 		const characterDetails = Array.from(Object.keys(data?.results[0]))
 		return (
@@ -32,7 +38,8 @@ const Characters = () => {
 							<Card.Header>{character.name}</Card.Header>
 							{character && character.characters && <Card.Meta> characters : {character.characters.length}</Card.Meta>}
 							<Card.Description><List.Item>{characterDetails.map((detail) => {
-								return <List>{detail}: {character[detail]}</List>
+								const detailName = cleanUpDetailName(detail)
+								return <List>{detailName}: {character[detail]}</List>
 							})}</List.Item></Card.Description>
 						</Card.Content>
 						<Card.Content extra>
