@@ -3,11 +3,16 @@ import { Button, Modal, List } from 'semantic-ui-react'
 
 const CharacterDetails = ({ details }) => {
 	const [modalOpen, setModalOpen] = useState(false)
+	// gets array of keys for character API response
 	const characterDetails = Array.from(Object.keys(details))
+	// hard coded array of character meta data we don't want to show users
+	const fieldsToExclude = ['created', 'edited', 'url']
+
 	const cleanUpDetailName = detailName => {
 		let cleanedDetailName = detailName.replace('_', ' ')
 		return cleanedDetailName.charAt(0).toUpperCase() + cleanedDetailName.slice(1)
 	}
+
 	if (details) {
 		return (
 			<Modal
@@ -22,16 +27,19 @@ const CharacterDetails = ({ details }) => {
 						<strong>Character Details</strong>
 					</Modal.Description>
 					<Modal.Description>
-						<List.Item>
-							{characterDetails.map(detail => {
-								const detailName = cleanUpDetailName(detail)
-								return (
-									<List>
-										{detailName}: {details[detail]}
-									</List>
-								)
-							})}
-						</List.Item>
+						<List>
+							{characterDetails
+								.filter(detailKey => details[detailKey].length > 0)
+								.filter(detailKey => !fieldsToExclude.find(keyToExclude => keyToExclude === detailKey))
+								.map(detailKey => {
+									const detailName = cleanUpDetailName(detailKey)
+									return (
+										<List.Item>
+											{detailName}: {details[detailKey]}
+										</List.Item>
+									)
+								})}
+						</List>
 					</Modal.Description>
 				</Modal.Content>
 			</Modal>

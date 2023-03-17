@@ -8,11 +8,12 @@ import CharacterDetails from './CharacterDetails'
 const Characters = () => {
 	const { data, isError, isLoading } = useGetCharactersQuery()
 
+
 	const dispatch = useDispatch()
 
 	const selectCharacter = e => {
 		const { title } = e.currentTarget.dataset
-		const character = data.results.find(character => character.title === title)
+		const character = data.results.find(character => character.name === title)
 		return character
 	}
 
@@ -38,7 +39,7 @@ const Characters = () => {
 							<CharacterDetails details={character} />
 							<Button
 								icon={{ name: 'plus', size: 'small' }}
-								data-title={character.title}
+								data-title={character.name}
 								positive
 								content="Add to faves"
 								onClick={addToFavourites}
