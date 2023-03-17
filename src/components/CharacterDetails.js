@@ -8,14 +8,14 @@ const CharacterDetails = ({ details }) => {
 	const characterDetails = Array.from(Object.keys(details))
 
 	// hard coded array of character meta data we don't want to show users
-	const fieldsToExclude = ['created', 'edited', 'url']
+	const fieldsToExclude = ['created', 'edited', 'url', 'homeworld']
 
     // remove underscore and capitalise character detail keys to display in list
 	const cleanUpDetailName = detailName => {
 		let cleanedDetailName = detailName.replace('_', ' ')
 		return cleanedDetailName.charAt(0).toUpperCase() + cleanedDetailName.slice(1)
 	}
-    
+
     // display number of elements if they are urls eg. number of films or starships
     const cleanValuesToRender = detail => {
         if (Array.isArray(detail)) return detail.length
