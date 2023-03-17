@@ -3,15 +3,24 @@ import { Button, Modal, List } from 'semantic-ui-react'
 
 const CharacterDetails = ({ details }) => {
 	const [modalOpen, setModalOpen] = useState(false)
+
 	// gets array of keys for character API response
 	const characterDetails = Array.from(Object.keys(details))
+
 	// hard coded array of character meta data we don't want to show users
 	const fieldsToExclude = ['created', 'edited', 'url']
 
+    // remove underscore and capitalise character detail keys to display in list
 	const cleanUpDetailName = detailName => {
 		let cleanedDetailName = detailName.replace('_', ' ')
 		return cleanedDetailName.charAt(0).toUpperCase() + cleanedDetailName.slice(1)
 	}
+    
+    // display number of elements if they are urls eg. number of films or starships
+    const cleanValuesToRender = detail => {
+        if (Array.isArray(detail)) return detail.length
+        return detail
+    }
 
 	if (details) {
 		return (
@@ -33,9 +42,10 @@ const CharacterDetails = ({ details }) => {
 								.filter(detailKey => !fieldsToExclude.find(keyToExclude => keyToExclude === detailKey))
 								.map(detailKey => {
 									const detailName = cleanUpDetailName(detailKey)
+                                    const valueToRender = cleanValuesToRender(details[detailKey])
 									return (
 										<List.Item>
-											{detailName}: {details[detailKey]}
+											{detailName}: {valueToRender}
 										</List.Item>
 									)
 								})}
